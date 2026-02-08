@@ -1,0 +1,11 @@
+{
+    "kotlin.completion.snippets.enabled": false,
+    "kotlin.debugAdapter.enabled": false,
+    "kotlin.diagnostics.enabled": false,
+    "kotlin.externalSources.useKlsScheme": false,
+    "kotlin.indexing.enabled": false,
+    "kotlin.languageServer.enabled": false,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true
+}

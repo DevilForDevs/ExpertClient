@@ -1,0 +1,94 @@
+{
+    "name": "TOP TRENDS",
+    "items": [
+        {
+            "hl": "India vs England",
+            "type": "featured",
+            "imageid": "115394341",
+            "imagesize": "1478642",
+            "ag": "timesofindia.com",
+            "id": "115393823",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/sports/cricket/india-vs-england-live-score-2nd-odi-today-cricket-match-ind-vs-eng-live-streaming-barabati-stadium-cuttack/liveblog/118083206.cms"
+        },
+        {
+            "imageid": "107307452",
+            "imagesize": "37552",
+            "hl": "H1B Visa",
+            "id": "107307452",
+            "tn": "liveblog",
+            "wu": "https://timesofindia.indiatimes.com/world/us/trump-administration-outlines-major-reforms-for-h-1b-visas-including-for-cap-exempt-segment/articleshow/123722927.cms"
+        },
+        {
+            "hl": "Leicester Diwali Celebrations",
+            "imageid": "115063616",
+            "imagesize": "1239877",
+            "ag": "timesofindia.com",
+            "id": "123725201",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/world/uk/leicesters-diwali-celebrations-all-but-cancelled-this-year/articleshow/123725201.cms"
+        },
+        {
+            "hl": "CBSE Class 10 English Exam",
+            "imageid": "114860959",
+            "imagesize": "724924",
+            "ag": "timesofindia.com",
+            "id": "117969684",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/education/news/cbse-class-10-english-exam-25-literature-questions-students-should-practise-for-top-notch-preparation/articleshow/117969684.cms"
+        },
+        {
+            "hl": "Canada Work Permit Rule",
+            "imageid": "114860197",
+            "imagesize": "26374",
+            "ag": "tnn",
+            "id": "118012760",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/education/news/canadas-new-open-work-permit-rules-what-spouses-of-international-students-and-workers-need-to-know/articleshow/118012760.cms"
+        },
+        {
+            "hl": "Virat Kohli",
+            "imageid": "114949512",
+            "imagesize": "1719511",
+            "ag": "ap",
+            "id": "118081041",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/sports/cricket/england-tour-of-india-2025/2nd-odi-virat-kohlis-in-but-whos-out-selection-dilemma-as-india-look-to-seal-series-against-england/articleshow/118081041.cms"
+        },
+        {
+            "imageid": "107276940",
+            "imagesize": "127142",
+            "hl": "Election Results",
+            "id": "107276940",
+            "tn": "liveblog",
+            "wu": "https://timesofindia.indiatimes.com/india/delhi-election-results-2025-live-updates-delhi-assembly-election-2025-result-bjp-aap-congress/liveblog/118039842.cms"
+        },
+        {
+            "hl": "Hailee Steinfelds",
+            "imageid": "114956525",
+            "imagesize": "536331",
+            "ag": "timesofindia.com",
+            "id": "118073393",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/sports/nfl/news/hailee-steinfelds-gesture-towards-josh-allen-at-the-nfl-honors-has-the-internet-talking-and-says-a-lot-about-their-relationship/articleshow/118073393.cms"
+        },
+        {
+            "hl": "Anthony Edwards",
+            "imageid": "115059273",
+            "imagesize": "69234",
+            "ag": "timesofindia.com",
+            "id": "118074066",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/sports/nba/top-stories/will-anthony-edwards-play-tonight-against-the-portland-trail-blazers-latest-update-on-the-minnesota-timberwolves-stars-injury-report-february-8-2025/articleshow/118074066.cms"
+        },
+        {
+            "hl": "Delhi Assembly Election Results",
+            "imageid": "115059135",
+            "imagesize": "55048",
+            "ag": "timesofindia.com",
+            "id": "115058858",
+            "tn": "news",
+            "wu": "https://timesofindia.indiatimes.com/elections/assembly-elections/delhi/results"
+        }
+    ]
+}

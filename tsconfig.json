@@ -1,0 +1,13 @@
+{
+  "extends": "@react-native/typescript-config",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/misfunction.js",
+    "**/*.d.ts",
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/Pods"
+  ]
+}
