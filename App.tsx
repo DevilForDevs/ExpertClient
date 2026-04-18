@@ -36,6 +36,8 @@ import PageDetailsSr from './screens/PageDetailsSr/PageDetailsSr';
 import { navigationRef } from './ApplevelBackends/NavigationRef';
 import { useShareIntent } from './ApplevelBackends/shareIntent';
 import SuggestedSites from './screens/SitesSuggesstionscreen/SuggestedSites';
+import MoviesRepo from './screens/MoviesRepo/MoviesRepo';
+import MoviesHubCatScreen from './screens/MoviesHubCatScreen/MoviesHubCatScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const eventEmitter = new NativeEventEmitter();
@@ -130,7 +132,7 @@ export default function App() {
       <AskFormatProvider>
         <NavigationContainer ref={navigationRef}>
           <Stack.Navigator
-            initialRouteName="SuggestedSites"
+            initialRouteName="SplashScreen"
             screenOptions={{ headerShown: false }}
           >
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
@@ -152,6 +154,8 @@ export default function App() {
             <Stack.Screen name="SarkariResult" component={SarkariResult} />
             <Stack.Screen name="PageDetailsSr" component={PageDetailsSr} />
             <Stack.Screen name="SuggestedSites" component={SuggestedSites} />
+            <Stack.Screen name="MoviesRepo" component={MoviesRepo} />
+            <Stack.Screen name="MoviesHubCatScreen" component={MoviesHubCatScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </AskFormatProvider>

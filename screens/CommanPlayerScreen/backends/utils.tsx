@@ -4,6 +4,7 @@ import { NativeModules } from 'react-native'
 import { extractItems } from "../../CommanScreen/backends/xhmparsers/parser";
 import { uncutmazaVideoSchema, xmazaSchema } from "../../CommanScreen/backends/schemas";
 import { formatViews, handleDesiPornTube } from "../../CommanScreen/backends/siteManager";
+import { getVideoUrls } from "../../MoviesRepo/backEnds/utils";
 
 
 
@@ -620,6 +621,31 @@ async function handleDesiTube(mvideo: Video): Promise<VideoDescription> {
     return baseVideoDetails
 }
 
+async function handleMp4Movies(mvideo: Video): Promise<VideoDescription> {
+    const baseVideoDetails: VideoDescription = {
+        title: mvideo.title,
+        channelName: mvideo.channelName ?? "Mp4Movies",
+        channelPhoto: "",
+        channelId: "",
+        video: mvideo,
+        hashTags: "",
+        hlsUrl: undefined,
+        views: 0,
+        uploaded: "scrapper failed",
+        subscriber: "",
+        likes: "",
+        dislikes: "",
+        commentsCount: "00k",
+        suggestedVideos: [],
+    };
+
+    const result = await getVideoUrls(mvideo.pageUrl ?? "");
+    return {
+        ...baseVideoDetails,
+        streamingSources: result
+    };
+}
+
 
 export async function getVideoFileUrlAndDetails(video: Video): Promise<VideoDescription> {
     console.log(video);
@@ -660,6 +686,9 @@ export async function getVideoFileUrlAndDetails(video: Video): Promise<VideoDesc
 
     if (video.pageUrl?.includes("desi-porn")) {
         return await handleDesiTube(video);
+    }
+    if (video.pageUrl?.includes("mp4moviez")) {
+        return await handleMp4Movies(video);
     }
 
     return videoDetails

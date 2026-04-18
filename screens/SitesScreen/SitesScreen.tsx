@@ -12,26 +12,19 @@ import { useSharedFilesStore } from '../../utils/Store'
 import { videoId } from '../../utils/Interact'
 import { Video } from '../../utils/types'
 
-/* ------------------ Data ------------------ */
 
-/* ------------------ Data ------------------ */
-
-const SITES: Site[] = [
-    { id: 'yt', name: 'YouTube', url: 'https://www.youtube.com', route: 'BrowserScreen' },
-    { id: 'ig', name: 'Easy Links', url: 'Easy links', route: 'BrowserScreen' }, // new default
-    { id: 'xh', name: 'xHamster', url: 'https://xhamster1.desi/', route: 'BrowserScreen' },
-    { id: 'mp', name: 'MetaPorn', url: 'https://metaporn.com', route: 'BrowserScreen' },
-    { id: 'um', name: 'Uncutmaza', url: 'https://uncutmaza.com.co/', route: 'BrowserScreen' },
-    { id: 'xmz', name: 'xmaza.tv', url: 'https://xmaza.tv/', route: 'BrowserScreen' },
-    { id: 'dpt', name: 'desi-porn', url: 'https://desi-porn.tube/', route: 'BrowserScreen' },
-]
-
-
-/* ------------------ Screen ------------------ */
 
 export default function SitesScreen() {
+
     const navigation = useNavigation<navStack>()
     const { files, addFile, setFiles, clearFiles } = useSharedFilesStore();
+
+    const DEFAULT_SITES: Site[] = [
+        { id: 'yt', name: 'YouTube', url: 'https://www.youtube.com', route: 'BrowserScreen' },
+        { id: 'ig', name: 'Easy Links', url: 'Easy links', route: 'BrowserScreen' },
+    ]
+
+    const [sites, setSites] = useState<Site[]>(DEFAULT_SITES)
 
     const [showAll, setShowAll] = useState(false)
     const tapCount = useRef(0)
@@ -68,21 +61,27 @@ export default function SitesScreen() {
     }, [files])
 
     function onSelectSite(site: Site) {
-        if (site.name === 'YouTube') {
-            navigation.navigate('BrowserScreen', { name: 'Youtube' })
-        } else {
-            if (site.id == "ig") {
-                navigation.navigate("SarkariResult");
-            } else {
-                navigation.navigate('CommanScreen', { site })
-            }
+        switch (site.id) {
+            case 'yt':
+                navigation.navigate('BrowserScreen', { name: 'Youtube' });
+                break;
 
+            case 'ig':
+                navigation.navigate('SarkariResult');
+                break;
+
+            case 'mp4m':
+                navigation.navigate("MoviesRepo", { site });
+                break;
+
+            default:
+                navigation.navigate('CommanScreen', { site });
         }
     }
 
     const visibleSites = showAll
-        ? SITES
-        : SITES.filter(site => site.id === 'yt' || site.id === 'ig') // show YouTube & Instagram by default
+        ? sites
+        : sites.filter(site => site.id === 'yt' || site.id === 'ig')
 
     const renderItem = ({ item }: { item: Site }) => (
         <Pressable style={styles.card} onPress={() => onSelectSite(item)}>
@@ -90,6 +89,28 @@ export default function SitesScreen() {
             <Text style={styles.subtitle}>{item.url}</Text>
         </Pressable>
     )
+
+
+    useEffect(() => {
+        async function loadSites() {
+            try {
+                const res = await fetch('https://studyzem.com/sites.json')
+
+                if (!res.ok) throw new Error('Network error')
+
+                const data = await res.json()
+
+                if (Array.isArray(data)) {
+                    setSites(data)
+                }
+            } catch (err) {
+                console.log('Using default sites:', err)
+                // fallback already handled
+            }
+        }
+
+        loadSites()
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>

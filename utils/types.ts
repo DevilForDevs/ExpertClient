@@ -11,6 +11,7 @@ export interface Video {
   thumbnail?: string,
   pageUrl?: string,
   hls?: string; // 👈 NEW (optional)
+  streamVariants?: StreamVariant[]
 }
 
 export interface VideoDescription {

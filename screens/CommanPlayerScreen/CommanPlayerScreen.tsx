@@ -1,13 +1,12 @@
 import {
     StyleSheet, Text, View, NativeModules, FlatList, ActivityIndicator,
-    Pressable, StatusBar, Platform
+    Pressable, StatusBar, Platform, Modal
 } from 'react-native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-
+import Clipboard from '@react-native-clipboard/clipboard'
 import { useVideoStoreForSearch } from '../../utils/Store';
 import { Video, ShortVideo } from '../../utils/types';
 import GridItem from '../CommanScreen/widgets/GridItem';
@@ -17,6 +16,7 @@ import VideoDetails from '../VideoPlayerScreen/widgets/VideoDetails';
 import { getVideoFileUrlAndDetails } from './backends/utils';
 import Player from '../VideoPlayerScreen/widgets/Player';
 import ResolutionBottomSheet from '../VideoPlayerScreen/widgets/ResolutionBottomSheet';
+import AskVariantDialog from '../MoviesRepo/widgets/AskVariantDialog';
 
 
 type NavigationProp = RouteProp<
@@ -35,20 +35,16 @@ export default function CommanPlayerScreen() {
     const [showFlatList, setFlatList] = useState(true);
     const listRef = useRef<FlatList>(null);
     const onEndReachedCalledDuringMomentum = useRef(false);
-
-    const [menuVisible, setMenuVisible] = useState(false);
     const [pageNo, setPageNo] = useState(2);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
     const [retryCount, setRetryCount] = useState(3);
-    const [isSearch, setIsSearch] = useState(false);
     const [currentVideo, setCurrentVideo] = useState<VideoDescription>();
-    const [pagingParams, setPagingParams] = useState<any>(null);
     const [tracks, setTracks] = useState<VideoTrack[]>([]);
     const [selectedTrack, setSelectedTrack] = useState<number | "auto">("auto");
-    const [resolutions, setResolutions] = useState<string[]>([]);
-    const [selectedResolution, setSelectedResolution] = useState<string | null>(null);
     const [showBottomSheet, setShowBottomSheet] = useState(false);
-
+    const [modalVisible, setModalVisible] = useState(false);
+    const [testedAllVariants, setTestedAllVariants] = useState(false);
+    const [testedVariants, setTestedVariants] = useState<StreamVariant[]>([]);
 
     const {
         totalVideos,
@@ -58,17 +54,57 @@ export default function CommanPlayerScreen() {
         query,
     } = useVideoStoreForSearch();
 
+    async function isUrlWorking(url: string): Promise<boolean> {
+        try {
+            const response = await fetch(url, { method: "HEAD" })
+            return response.status === 200
+        } catch (error) {
+            return false
+        }
+    }
+
 
     async function loadData(mvideo: Video) {
+        console.log(mvideo)
         clearVideos()
         const vid = await getVideoFileUrlAndDetails(mvideo);
+
         setCurrentVideo(vid);
         if (vid.hlsUrl == undefined) {
-            vid.streamingSources?.forEach(element => {
-                if (element.type = "mp4") {
-                    setMediaUrl(element.ref)
+
+            if (arrivedVideo.pageUrl?.includes("mp4moviez")) {
+
+                if (vid.streamingSources?.length) {
+                    const sources = vid.streamingSources as StreamVariant[]
+
+
+                    for (let i = sources.length - 1; i >= 0; i--) {
+                        const variant = sources[i]
+                        console.log("Checking varint", variant.resolution);
+                        const result = await MyNativeModule.checkUrl(variant.ref)
+                        if (result) {
+                            if (mediaUrl != "") {
+                                console.log(variant);
+                                setMediaUrl(variant.ref)
+                            }
+                            setTestedVariants((prev) => [...prev, {
+                                ...variant,
+                                resolution: variant.resolution?.replace(vid.title ?? "", "") ?? ""
+                            }]);
+                        }
+
+                    }
+                    setTestedAllVariants(true)
+
                 }
-            });
+
+            } else {
+                if (vid.streamingSources) {
+                    setMediaUrl(vid.streamingSources[0].ref)
+                }
+
+            }
+
         } else {
             setMediaUrl(vid.hlsUrl ?? "")
         }
@@ -81,6 +117,10 @@ export default function CommanPlayerScreen() {
     useEffect(() => {
         loadData(arrivedVideo)
     }, []);
+
+    useEffect(() => {
+        console.log(mediaUrl);
+    }, [mediaUrl])
 
     const toggleFlatList = () => {
 
@@ -152,11 +192,14 @@ export default function CommanPlayerScreen() {
     }
 
     function handleMoreVert() {
-        if (tracks.length === 0) return;
-        setShowBottomSheet(true);
+        if (arrivedVideo.pageUrl?.includes("mp4moviez")) {
+            setModalVisible(true)
+        } else {
+            if (tracks.length === 0) return;
+            setShowBottomSheet(true);
+        }
+
     }
-
-
 
     return (
         <View style={{
@@ -175,7 +218,7 @@ export default function CommanPlayerScreen() {
                 toggleFlatList={toggleFlatList}
                 showMenu={handleMoreVert}
                 onProgressSave={handleProgress}
-                key={"Player"}   // ✅ stable
+                key={"Player"}
                 distroyScreen={() => console.log("progressasve")}
                 onToggle={(val) => console.log("progressasve")}
                 videoEnded={(endedAsScreen) => {
@@ -218,9 +261,12 @@ export default function CommanPlayerScreen() {
                             currentVideo ? (
                                 <VideoDetails
                                     videoDes={currentVideo}
-                                    onDownloadPress={() =>
-                                        console.log("ranjan")
-                                    }
+                                    onDownloadPress={() => {
+                                        if (arrivedVideo.pageUrl) {
+                                            Clipboard.setString(arrivedVideo.pageUrl)
+                                            console.log("Copied:", arrivedVideo.pageUrl)
+                                        }
+                                    }}
                                     onChannelClick={() => console.log("channel click")}
                                 />
                             ) : (
@@ -238,6 +284,22 @@ export default function CommanPlayerScreen() {
 
                     : <></>
             }
+            <Modal
+                visible={modalVisible}
+                transparent
+                animationType="slide"
+                onRequestClose={() => {
+                    setTestedVariants([])
+                    setModalVisible(false)
+                }}
+
+            >
+                <AskVariantDialog testedAllVariants={testedAllVariants}
+                    testedVariants={testedVariants}
+                    hideModal={() => setModalVisible(false)}
+                    variantSelected={(variant) => setMediaUrl(variant.ref)}
+                />
+            </Modal>
         </View>
     )
 }
@@ -282,3 +344,4 @@ const styles = StyleSheet.create({
         alignItems: "center"
     }
 })
+
